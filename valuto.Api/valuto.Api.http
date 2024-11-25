@@ -1,6 +1,0 @@
-@valuto.Api_HostAddress = http://localhost:5045
-
-GET {{valuto.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
