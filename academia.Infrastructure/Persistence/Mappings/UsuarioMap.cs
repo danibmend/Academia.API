@@ -19,13 +19,16 @@ namespace academia.Infrastructure.Persistence.Mappings
             builder.Property(u => u.Id).ValueGeneratedOnAdd();
 
             builder.Property(c => c.Nome)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(150);
 
             builder.Property(c => c.Email)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(c => c.Senha)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(30);
 
         }
     }

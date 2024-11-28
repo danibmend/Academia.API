@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application", "2 - Appl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Presentation", "3 - Presentation", "{0EE4C969-6E54-40A4-8757-192BD9AFBE38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "academia.WebApi", "academia.WebApi\academia.WebApi.csproj", "{B13D2D3E-8B66-4539-A68A-32017A67FD3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{BC699808-A155-4DA7-BF54-2218BF9E830F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC699808-A155-4DA7-BF54-2218BF9E830F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC699808-A155-4DA7-BF54-2218BF9E830F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13D2D3E-8B66-4539-A68A-32017A67FD3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13D2D3E-8B66-4539-A68A-32017A67FD3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13D2D3E-8B66-4539-A68A-32017A67FD3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13D2D3E-8B66-4539-A68A-32017A67FD3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 		{62B509CC-D5D5-4E3D-9F19-E8E00DFCA767} = {1F62DBB6-B9DC-44F3-856A-43B1D2AA14F9}
 		{D2740723-4672-4488-84A4-8F15496AB1EC} = {6845FE15-F971-432F-B861-B3AF8FE98967}
 		{BC699808-A155-4DA7-BF54-2218BF9E830F} = {CB453761-C8B6-49FB-A274-7231573CFBD4}
+		{B13D2D3E-8B66-4539-A68A-32017A67FD3B} = {0EE4C969-6E54-40A4-8757-192BD9AFBE38}
 	EndGlobalSection
 EndGlobal
