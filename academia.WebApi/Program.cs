@@ -1,5 +1,7 @@
+using academia.Application.Mappings;
 using academia.Infrastructure;
 using academia.Infrastructure.Persistence;
+using academia.WebApi.Controllers.Base;
 using academia.WebApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.Configure<ApplicationDbContext>(x => x.Database.Migrate());
+
+builder.Services.AddScoped<IResponseFactory, ResponseFactory>();
+builder.Services.AddAutoMapper(typeof(MappingDtoProfiles).Assembly);
 
 builder.Services.LoadRepositories();
 builder.Services.LoadServices();

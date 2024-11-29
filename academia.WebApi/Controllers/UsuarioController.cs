@@ -39,7 +39,7 @@ namespace academia.WebApi.Controllers
             return Response(result);
         }
 
-        [HttpGet("usuario/validar")]
+        [HttpPost("usuario/validar")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<IActionResult> ValidarUsuario([FromBody] UsuarioLoginDto request, CancellationToken cancellationToken)
