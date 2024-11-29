@@ -1,4 +1,5 @@
 using academia.Infrastructure.Persistence;
+using academia.WebApi.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.Configure<ApplicationDbContext>(x => x.Database.Migrate());
+
+builder.Services.LoadRepositories();
+builder.Services.LoadServices();
+builder.Services.LoadValidators();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using academia.Domain.Interfaces;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PortalServico.Application.Interfaces.IServices.Base;

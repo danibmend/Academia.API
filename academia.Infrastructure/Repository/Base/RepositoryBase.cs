@@ -2,31 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using academia.Domain.Entidades.Base;
+using academia.Domain.Interfaces.IRepository;
+using academia.Infrastructure.Persistence;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace academia.Infrastructure.Repository.Base
 {
-    public class RepositoryBase
-    {
         public abstract class RepositoryBase<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
         {
-            private PortalServicoContext _context { get; set; }
+            private ApplicationDbContext _context { get; set; }
             private IMapper _mapper;
             private MapperConfiguration _mapperConfiguration;
             public RepositoryBase(IServiceProvider serviceProvider)
             {
-                _context = serviceProvider.GetRequiredService<PortalServicoContext>();
+                _context = serviceProvider.GetRequiredService<ApplicationDbContext>();
                 _mapper = serviceProvider.GetRequiredService<IMapper>();
                 _mapperConfiguration = (MapperConfiguration)_mapper.ConfigurationProvider;
-            }
-
-            public async Task<bool> VerificarConexaoAsync() => await _context.Database.CanConnectAsync();
-
-            public async Task<IQueryable<TEntity>> ObterConsulta()
-            {
-                return await Task.Run(() => _context.Set<TEntity>().AsQueryable());
             }
 
             #region Métodos de Criação
@@ -294,7 +292,132 @@ namespace academia.Infrastructure.Repository.Base
                 return result;
             }
 
+            public async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellation)
+        => await _context.Set<TEntity>().CountAsync(expression, cancellation);
+
+            public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellation)
+                => await CountAsync(expression, cancellation) > 0;
+
             #endregion
 
+            #region Metodos Auxiliares
+
+            private IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> set, string? includes)
+            {
+                if (string.IsNullOrEmpty(includes))
+                    return set;
+
+                string[] incs = includes.Split(',').ToArray();
+                foreach (var inc in incs)
+                    set = set.Include(inc.Trim());
+                return set;
+
+            }
+            private static IQueryable<TDto> MapProjection<TDto>(IQueryable<TEntity> source)
+            {
+                var sourceProperties = typeof(TEntity).GetProperties().Where(p => p.CanRead);
+
+                var destProperties = typeof(TDto).GetProperties().Where(p => p.CanWrite);
+
+                var propertyMap = from d in destProperties
+                                  join s in sourceProperties on new { d.Name, d.PropertyType } equals new { s.Name, s.PropertyType }
+                                  select new { Source = s, Dest = d };
+
+                var itemParam = Expression.Parameter(typeof(TEntity), "item");
+
+                var memberBindings = propertyMap.Select(p => (MemberBinding)Expression.Bind(p.Dest, Expression.Property(itemParam, p.Source)));
+
+                var newExpression = Expression.New(typeof(TDto));
+
+                var memberInitExpression = Expression.MemberInit(newExpression, memberBindings);
+
+                var projection = Expression.Lambda<Func<TEntity, TDto>>(memberInitExpression, itemParam);
+
+                return source.Select(projection);
+            }
+            private IQueryable<TEntity> ApplyFilter(IQueryable<TEntity> set, Expression<Func<TEntity, bool>> filter)
+            {
+                if (filter is not null)
+                    return set.Where(filter);
+                return set;
+
+            }
+            private IQueryable<TEntity> ApplySort(IQueryable<TEntity> set, string? sortExpression)
+            {
+                if (string.IsNullOrEmpty(sortExpression))
+                    return set;
+
+                var sortArray = PrepareSort(sortExpression);
+
+                foreach (var item in sortArray)
+                {
+                    string[] props = item.FieldName!.Split('.');
+                    Type type = typeof(TEntity);
+                    ParameterExpression arg = Expression.Parameter(type, "x");
+                    Expression expr = arg;
+                    foreach (string prop in props)
+                    {
+                        PropertyInfo pi = type.GetProperty(prop)!;
+                        expr = Expression.Property(expr, pi);
+                        type = pi.PropertyType;
+                    }
+                    Type delegateType = typeof(Func<,>).MakeGenericType(typeof(TEntity), type);
+                    LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
+
+                    object? result = typeof(Queryable).GetMethods()
+                        .Single(method => method.Name == item.Direction
+                            && method.IsGenericMethodDefinition
+                            && method.GetGenericArguments().Length == 2
+                            && method.GetParameters().Length == 2)
+                        .MakeGenericMethod(typeof(TEntity), type)
+                        .Invoke(null, new object[] { set, lambda });
+                    set = (IOrderedQueryable<TEntity>)result!;
+                }
+                return set;
+            }
+            private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> set, int? pageSize, int? page)
+            {
+                if (pageSize.HasValue && page.HasValue)
+                    return set.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
+                return set;
+            }
+            private SortProperty[] PrepareSort(string sortExpression)
+            {
+                List<SortProperty> list = new List<SortProperty>();
+
+                var sortList = sortExpression.Split(',');
+                bool firstPass = true;
+                foreach (string sort in sortList)
+                {
+                    string[] item = sort.Trim().Split(' ');
+                    if (item.Length == 0)
+                        continue;
+                    else if (item.Length == 1)
+                        list.Add(new SortProperty(item[0], firstPass ? "OrderBy" : "ThenBy"));
+                    else if (item.Length == 2)
+                    {
+                        if (item[1].ToUpper() == "DESC")
+                            list.Add(new SortProperty(item[0], firstPass ? "OrderByDescending" : "ThenByDescending"));
+                        else
+                            list.Add(new SortProperty(item[0], firstPass ? "OrderBy" : "ThenBy"));
+                    }
+                    firstPass = false;
+                }
+                return list.ToArray();
+            }
+            internal class SortProperty
+            {
+                public SortProperty(string fieldName, string direction)
+                {
+                    FieldName = fieldName;
+                    Direction = direction;
+                }
+
+                public string? FieldName { get; private set; }
+                public string Direction { get; private set; }
+            }
+
+            #endregion
         }
-    }
+}
+

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using academia.Domain.Entidades.Base;
 
-namespace academia.Domain.Entidades
+namespace academia.Application.DTOs
 {
-    public class Usuario : BaseEntity
+    public class UsuarioRetornoDto
     {
+        public long Id { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
         public string? Senha { get; set; }
         public DateTime DataNascimento { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public DateTime DataAtualizacao { get; set; }
     }
 }

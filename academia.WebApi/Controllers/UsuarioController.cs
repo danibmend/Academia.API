@@ -1,4 +1,6 @@
-﻿using academia.WebApi.Controllers.Base;
+﻿using academia.Application.DTOs;
+using academia.Application.Interfaces;
+using academia.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

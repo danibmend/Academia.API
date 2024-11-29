@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using academia.Application.DTOs;
 using academia.Application.Interfaces;
+using academia.Application.Services.Base;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace academia.Application.Services
 {
