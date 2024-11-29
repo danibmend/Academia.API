@@ -1,3 +1,4 @@
+using academia.Infrastructure;
 using academia.Infrastructure.Persistence;
 using academia.WebApi.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseCors(options => options
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 }
+
+app.UseMiddleware(typeof(ErrorHandlerMiddleware));
 
 app.UseHttpsRedirection();
 

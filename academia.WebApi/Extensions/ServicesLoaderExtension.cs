@@ -1,7 +1,9 @@
 ﻿using academia.Application.DTOs;
 using academia.Application.Interfaces;
+using academia.Application.Interfaces.Validator;
 using academia.Application.Services;
 using academia.Application.Validations;
+using academia.Application.Validations.Utils;
 using academia.Domain.Interfaces;
 using academia.Domain.Interfaces.IRepository;
 using academia.Infrastructure.Repository;
@@ -16,10 +18,16 @@ namespace academia.WebApi.Extensions
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
-         d LoadValidators(this IServiceCollection services) 
+        public static void LoadValidators(this IServiceCollection services) 
         {
             services.AddScoped<IValidator<UsuarioCadastroDto>, UsuarioCadastroValidator>();
             services.AddScoped<IValidator<UsuarioAtualizarDto>, UsuarioAtualizarValidator>();
+            services.AddScoped<IUtilsValidator, UtilsValidator>();
+        }
+
+        public static void LoadServices (this IServiceCollection services)
+        {
+            services.AddScoped<IUsuarioService, UsuarioService>();
         }
     }
 }

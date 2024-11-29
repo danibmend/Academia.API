@@ -27,15 +27,15 @@ namespace academia.WebApi.Controllers
         public async Task<IActionResult> AtualizarDadosUsuario([FromBody] UsuarioAtualizarDto request, CancellationToken cancellationToken)
         {
             await _usuarioService.AtualizarUsuarioAsync(request, cancellationToken);
-            return Response(null);
+            return Response();
         }
 
-        [HttpGet("usuario/{cpf}")]
+        [HttpGet("usuario/{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(UsuarioRetornoDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ObterUsuario([FromRoute] string cpf, CancellationToken cancellationToken)
+        public async Task<IActionResult> ObterUsuario([FromRoute] long id, CancellationToken cancellationToken)
         {
-            var result = await _usuarioService.ObterPorCPFAsync(cpf, cancellationToken);
+            var result = await _usuarioService.ObterUsuarioAsync(id, cancellationToken);
             return Response(result);
         }
 

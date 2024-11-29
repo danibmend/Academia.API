@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using academia.Domain.Entidades.Base;
+using academia.Domain.Exceptions;
 using academia.Domain.Interfaces.IRepository;
 using academia.Infrastructure.Persistence;
 using AutoMapper;
