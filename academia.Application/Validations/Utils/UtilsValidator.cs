@@ -23,5 +23,33 @@ namespace academia.Application.Validations.Utils
 
             return !result;
         }
+
+        public async Task<bool> EmailExistenteAsync(string? email, CancellationToken cancellationToken)
+        {
+            var result = await _unitOfWork.UsuarioRepository.ExistsAsync(
+                 c => c.Email == email,
+                 cancellationToken
+                 );
+
+            return !result;
+        }
+        
+        public bool EmailValido(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+                return false;
+
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

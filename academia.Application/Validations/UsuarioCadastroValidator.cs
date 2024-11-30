@@ -35,6 +35,16 @@ namespace academia.Application.Validations
                 .MustAsync(_utilsValidator.NomeUsuarioExistenteAsync)
                 .WithMessage("Nome de usuário já em uso.")
                 .When(c => c.Nome != null);
+
+            RuleFor(usario => usario.Email)
+                .MustAsync(_utilsValidator.EmailExistenteAsync)
+                .WithMessage("Email já em uso.")
+                .When(c => c.Email != null);
+
+            RuleFor(usario => usario.Email)
+                .Must(_utilsValidator.EmailValido)
+                .WithMessage("Formato de email invalido.")
+                .When(c => c.Email != null);
         }
     }
 }

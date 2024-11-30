@@ -29,7 +29,7 @@ namespace academia.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto, CancellationToken cancellationToken)
+        public async Task<long> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto, CancellationToken cancellationToken)
         {
             await _usuarioCadastroValidator.ValidateAndThrowAsync(usuarioDto);
 
@@ -43,7 +43,9 @@ namespace academia.Application.Services
                     DataNascimento = usuarioDto.DataNascimento
                 };
 
-                await _unitOfWork.UsuarioRepository.CriarAsync(usuario, cancellationToken);
+                var usuarioId = await _unitOfWork.UsuarioRepository.CriarAsync(usuario, cancellationToken);
+
+                return usuarioId;
             }
             catch (Exception ex) 
             {
@@ -61,19 +63,17 @@ namespace academia.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> ValidarUsuarioAsync(UsuarioLoginDto usuarioDto, CancellationToken cancellationToken)
+        public async Task AutenticarUsuarioAsync(string nome, string senha, CancellationToken cancellationToken)
         {
-            try
-            {
-                return await _unitOfWork.UsuarioRepository.ExistsAsync(
-                c => c.Nome == usuarioDto.Nome && c.Senha == usuarioDto.Senha,
+                var existe = await _unitOfWork.UsuarioRepository.ExistsAsync(
+                c => c.Nome == nome && c.Senha == senha,
                 cancellationToken
                 );
-            }
-            catch (Exception ex) 
-            {
-                throw new BusinessException("Erro ao validar usuário. " + ex.Message, ex);
-            }
+
+                if(!existe)
+                    throw new NotFoundException("Usuário ou senha informados inexistentes.");
+
+                return;
         }
     }
 }

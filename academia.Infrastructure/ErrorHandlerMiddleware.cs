@@ -62,7 +62,7 @@ namespace academia.Infrastructure
 
         private async Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
         {
-            await HandleExceptionAsync(context, exception, HttpStatusCode.UnprocessableContent);
+            await HandleExceptionAsync(context, exception, HttpStatusCode.Unauthorized);
         }
 
         private async Task HandleDatabaseExceptionAsync(HttpContext context, DatabaseException exception)

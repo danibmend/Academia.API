@@ -9,5 +9,7 @@ namespace academia.Application.Interfaces.Validator
     public interface IUtilsValidator
     {
         Task<bool> NomeUsuarioExistenteAsync(string? nome, CancellationToken cancellationToken);
+        Task<bool> EmailExistenteAsync(string? email, CancellationToken cancellationToken);
+        bool EmailValido(string email);
     }
 }

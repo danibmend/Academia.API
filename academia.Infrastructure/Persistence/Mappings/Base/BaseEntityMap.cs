@@ -14,17 +14,16 @@ namespace academia.Infrastructure.Persistence.Mappings.Base
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.Property(c => c.Id)
+                .HasColumnName("ID")
                 .HasColumnOrder(1)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
-            builder.HasKey(c => c.Id);
-            ConfigureMapping(builder);
-            builder.OwnsOne(c => c.Metadados, d =>
-            {
-                d.Property(c => c.DataCriacao).IsRequired().HasColumnName("DATA_CRIACAO");
-                d.Property(c => c.DataAtualizacao).IsRequired().HasColumnName("DATA_ATUALIZACAO");
-            });
+            builder.Property(c => c.DataCriacao)
+               .HasColumnName("DATA_CRIACAO");
+
+            builder.Property(c => c.DataCriacao)
+               .HasColumnName("DATA_ATUALIZACAO");
 
             Seed(builder);
         }
