@@ -22,6 +22,7 @@ namespace academia.WebApi.Extensions
         {
             services.AddScoped<IValidator<UsuarioCadastroDto>, UsuarioCadastroValidator>();
             services.AddScoped<IValidator<UsuarioAtualizarDto>, UsuarioAtualizarValidator>();
+            services.AddScoped<IValidator<UsuarioLoginDto>, UsuarioLoginValidator>();
             services.AddScoped<IUtilsValidator, UtilsValidator>();
         }
 

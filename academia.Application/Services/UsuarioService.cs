@@ -17,16 +17,41 @@ namespace academia.Application.Services
     {
         private readonly IValidator<UsuarioCadastroDto> _usuarioCadastroValidator;
         private readonly IValidator<UsuarioAtualizarDto> _usuarioAtualizarValidator;
+        private readonly IValidator<UsuarioLoginDto> _usuarioLoginValidator;
 
         public UsuarioService(IServiceProvider serviceProvider) : base(serviceProvider) 
         {
             _usuarioCadastroValidator = serviceProvider.GetRequiredService<IValidator<UsuarioCadastroDto>>();
             _usuarioAtualizarValidator = serviceProvider.GetRequiredService<IValidator<UsuarioAtualizarDto>>();
+            _usuarioLoginValidator = serviceProvider.GetRequiredService<IValidator<UsuarioLoginDto>>();
         }
 
         public async Task AtualizarUsuarioAsync(UsuarioAtualizarDto usuarioDto, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _usuarioAtualizarValidator.ValidateAndThrowAsync(usuarioDto);
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var usuario = await _unitOfWork.UsuarioRepository.ObterAsync(
+                    c => c.Id == usuarioDto.Id,
+                    cancellationToken: cancellationToken
+                    );
+
+                usuario.Nome = usuarioDto.Nome;
+                usuario.Senha = usuarioDto.Senha;
+                usuario.Email = usuarioDto.Email;
+                usuario.DataNascimento = usuarioDto.DataNascimento;
+                usuario.DataAtualizacao = DateTime.Now;
+
+                await _unitOfWork.UsuarioRepository.AtualizarAsync(usuario, cancellationToken);
+                await _unitOfWork.CommitTransactionAsync();
+                return;
+            }
+            catch (Exception ex) 
+            {
+                await _unitOfWork.RollBackTransactionAsync();
+                throw new DatabaseException("Problemas para atualiazar usuário: " + ex.Message, ex);
+            }
         }
 
         public async Task<long> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto, CancellationToken cancellationToken)
@@ -55,7 +80,32 @@ namespace academia.Application.Services
 
         public async Task<UsuarioRetornoDto> ObterUsuarioAsync(long id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _unitOfWork.UsuarioRepository.ObterAsync<UsuarioRetornoDto>(
+                    c => c.Id == id,
+                    cancellationToken: cancellationToken
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new NotFoundException("Usuário não encontrado no banco: " + ex.Message, ex);
+            }
+        }
+
+        public async Task<List<UsuarioRetornoDto>> ObterUsuariosAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var retorno = await _unitOfWork.UsuarioRepository.ObterListaAsync<UsuarioRetornoDto>(
+                );
+
+                return retorno.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new NotFoundException("Erro ao obter usuários do banco: " + ex.Message, ex);
+            }
         }
 
         public async Task RemoverUsuarioAsync(long id, CancellationToken cancellationToken)
@@ -63,17 +113,20 @@ namespace academia.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task AutenticarUsuarioAsync(string nome, string senha, CancellationToken cancellationToken)
+        public async Task AutenticarUsuarioAsync(UsuarioLoginDto usuarioDto, CancellationToken cancellationToken)
         {
-                var existe = await _unitOfWork.UsuarioRepository.ExistsAsync(
-                c => c.Nome == nome && c.Senha == senha,
-                cancellationToken
-                );
+            await _usuarioLoginValidator.ValidateAndThrowAsync(usuarioDto);
 
-                if(!existe)
-                    throw new NotFoundException("Usuário ou senha informados inexistentes.");
+            var existe = await _unitOfWork.UsuarioRepository.ExistsAsync(
+            c => c.Nome == usuarioDto.Nome && c.Senha == usuarioDto.Senha,
+            cancellationToken
+            );
 
-                return;
+            if(!existe)
+                throw new NotFoundException("Usuário ou senha informados inexistentes.");
+
+            return;
         }
+
     }
 }

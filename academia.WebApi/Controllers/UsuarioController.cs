@@ -39,12 +39,21 @@ namespace academia.WebApi.Controllers
             return Response(result);
         }
 
-        [HttpGet("usuario/validar/nome/{nome}/senha/{senha}")]
+        [HttpGet("usuarios")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<UsuarioRetornoDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ObterUsuarios(CancellationToken cancellationToken)
+        {
+            var result = await _usuarioService.ObterUsuariosAsync(cancellationToken);
+            return Response(result);
+        }
+
+        [HttpPost("usuario/validar")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ValidarUsuario([FromRoute] string nome, string senha, CancellationToken cancellationToken)
+        public async Task<IActionResult> ValidarUsuario([FromBody] UsuarioLoginDto request, CancellationToken cancellationToken)
         {
-            await _usuarioService.AutenticarUsuarioAsync(nome, senha, cancellationToken);
+            await _usuarioService.AutenticarUsuarioAsync(request, cancellationToken);
             return Response();
         }
     }

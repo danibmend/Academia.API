@@ -33,7 +33,27 @@ namespace academia.Application.Validations.Utils
 
             return !result;
         }
-        
+
+        public async Task<bool> NomeUsuarioExistenteAtualizarAsync(string? nome, long id, CancellationToken cancellationToken)
+        {
+            var result = await _unitOfWork.UsuarioRepository.ExistsAsync(
+                 c => c.Nome == nome && c.Id != id,
+                 cancellationToken
+                 );
+
+            return !result;
+        }
+
+        public async Task<bool> EmailExistenteAtualizarAsync(string? email, long id, CancellationToken cancellationToken)
+        {
+            var result = await _unitOfWork.UsuarioRepository.ExistsAsync(
+                 c => c.Email == email && c.Id != id,
+                 cancellationToken
+                 );
+
+            return !result;
+        }
+
         public bool EmailValido(string email)
         {
             var trimmedEmail = email.Trim();

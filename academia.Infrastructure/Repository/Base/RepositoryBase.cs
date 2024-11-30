@@ -131,26 +131,13 @@ namespace academia.Infrastructure.Repository.Base
             #region Métodos de Listagem
 
             public async Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
-                Expression<Func<TEntity, bool>> expression,
-                string? includes = null,
-                string? orderBy = null,
-                int? pageSize = null, int? page = null,
                 CancellationToken cancellationToken = default)
             {
                 var set = _context.Set<TEntity>().AsQueryable();
-                set = ApplyIncludes(set, includes);
-                set = ApplyFilter(set, expression);
-                set = ApplySort(set, orderBy);
-                set = ApplyPagination(set, pageSize, page);
-
-
                 var result = await set
                     .AsNoTracking()
                     .ProjectTo<TDto>(_mapperConfiguration)
                     .ToListAsync(cancellationToken);
-
-
-
                 return result;
             }
 

@@ -13,6 +13,7 @@ namespace academia.Application.Interfaces
         Task AtualizarUsuarioAsync(UsuarioAtualizarDto usuarioDto, CancellationToken cancellationToken);
         Task RemoverUsuarioAsync(long id, CancellationToken cancellationToken);
         Task<UsuarioRetornoDto> ObterUsuarioAsync(long id, CancellationToken cancellationToken);
-        Task AutenticarUsuarioAsync(string nome, string senha, CancellationToken cancellationToken);
+        Task<List<UsuarioRetornoDto>> ObterUsuariosAsync(CancellationToken cancellationToken);
+        Task AutenticarUsuarioAsync(UsuarioLoginDto usuarioDto, CancellationToken cancellationToken);
     }
 }

@@ -17,14 +17,10 @@ namespace academia.Domain.Interfaces.IRepository
         Task RemoverAsync(TEntity entity, CancellationToken cancellationToken = default);
         Task RemoverAsync(TEntity[] obj, CancellationToken cancellationToken = default);
         Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
-            Expression<Func<TEntity, bool>> expression,
-            string? includes = null,
-            string? orderBy = null,
-            int? pageSize = null,
-            int? page = null,
-            CancellationToken cancellationToken = default);
+                       CancellationToken cancellationToken = default);
+        
 
-        Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
+            Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
             Expression<Func<TEntity, bool>> expression,
             Expression<Func<TEntity, TDto>> select,
             string? includes = null,
