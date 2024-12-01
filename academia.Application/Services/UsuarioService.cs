@@ -64,7 +64,7 @@ namespace academia.Application.Services
                 {
                     Nome = usuarioDto.Nome,
                     Email = usuarioDto.Email,
-                    Senha = usuarioDto.Senha,
+                    Senha = usuarioDto.Password,
                     DataNascimento = usuarioDto.DataNascimento
                 };
 
@@ -118,7 +118,7 @@ namespace academia.Application.Services
             await _usuarioLoginValidator.ValidateAndThrowAsync(usuarioDto);
 
             var existe = await _unitOfWork.UsuarioRepository.ExistsAsync(
-            c => c.Email == usuarioDto.Email && c.Senha == usuarioDto.Senha,
+            c => c.Email == usuarioDto.Email && c.Senha == usuarioDto.Password,
             cancellationToken
             );
 

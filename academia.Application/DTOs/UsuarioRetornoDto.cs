@@ -11,7 +11,7 @@ namespace academia.Application.DTOs
         public long Id { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
-        public string? Senha { get; set; }
+        public string? Password { get; set; }
         public DateTime DataNascimento { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime DataAtualizacao { get; set; }

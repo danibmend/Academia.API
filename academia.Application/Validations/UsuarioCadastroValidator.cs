@@ -16,7 +16,7 @@ namespace academia.Application.Validations
         {
             _utilsValidator = utilsValidator;
 
-            RuleFor(usuario => usuario.Senha)
+            RuleFor(usuario => usuario.Password)
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("Senha de usuário deve ser informada.");

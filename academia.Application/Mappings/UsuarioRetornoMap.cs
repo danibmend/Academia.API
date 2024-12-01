@@ -13,7 +13,8 @@ namespace academia.Application.Mappings
     {
         public UsuarioRetornoMap() 
         {
-            CreateProjection<Usuario, UsuarioRetornoDto>();
+            CreateProjection<Usuario, UsuarioRetornoDto>()
+                .ForMember(c => c.Password, e => e.MapFrom(e => e.Senha));
         }
     }
 }
