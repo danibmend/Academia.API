@@ -17,10 +17,10 @@ namespace academia.Application.Validations
                 .NotEmpty()
                 .WithMessage("Senha de usuário deve ser informada.");
 
-            RuleFor(usuario => usuario.Nome)
+            RuleFor(usuario => usuario.Email)
                 .NotNull()
                 .NotEmpty()
-                .WithMessage("Nome de usuário deve ser informado.");
+                .WithMessage("Email de usuário deve ser informado.");
         }
     }
 }

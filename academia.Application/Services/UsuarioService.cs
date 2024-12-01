@@ -118,12 +118,12 @@ namespace academia.Application.Services
             await _usuarioLoginValidator.ValidateAndThrowAsync(usuarioDto);
 
             var existe = await _unitOfWork.UsuarioRepository.ExistsAsync(
-            c => c.Nome == usuarioDto.Nome && c.Senha == usuarioDto.Senha,
+            c => c.Email == usuarioDto.Email && c.Senha == usuarioDto.Senha,
             cancellationToken
             );
 
             if(!existe)
-                throw new NotFoundException("Usuário ou senha informados inexistentes.");
+                throw new NotFoundException("Email ou senha informados inexistentes.");
 
             return;
         }
