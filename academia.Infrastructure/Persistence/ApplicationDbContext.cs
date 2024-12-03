@@ -7,6 +7,8 @@ namespace academia.Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
+        //parte da configuração do nosso banco de dados com o entityframework
+
         private IConfiguration _configuration;
         public ApplicationDbContext(IConfiguration configuration, DbContextOptions<ApplicationDbContext> options) : base(options)
         {

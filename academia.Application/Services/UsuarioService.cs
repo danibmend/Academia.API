@@ -28,17 +28,17 @@ namespace academia.Application.Services
 
         public async Task AtualizarUsuarioAsync(UsuarioAtualizarDto usuarioDto, CancellationToken cancellationToken)
         {
-            await _usuarioAtualizarValidator.ValidateAndThrowAsync(usuarioDto);
+            await _usuarioAtualizarValidator.ValidateAndThrowAsync(usuarioDto); //validações de entrada
             try
             {
-                await _unitOfWork.BeginTransactionAsync();
+                await _unitOfWork.BeginTransactionAsync(); //começando a transação com o UnityOfWork para conciliar as threads e tracks
                 var usuario = await _unitOfWork.UsuarioRepository.ObterAsync(
                     c => c.Id == usuarioDto.Id,
                     cancellationToken: cancellationToken
                     );
-
+                //Obtem o usuario atual do banco e o transforma no novo para enviar novamente.
                 usuario.Nome = usuarioDto.Nome;
-                usuario.Senha = usuarioDto.Senha;
+                usuario.Senha = usuarioDto.Password;
                 usuario.Email = usuarioDto.Email;
                 usuario.DataNascimento = usuarioDto.DataNascimento;
                 usuario.DataAtualizacao = DateTime.Now;
@@ -48,7 +48,7 @@ namespace academia.Application.Services
                 return;
             }
             catch (Exception ex) 
-            {
+            {//Em caso de erro ele para a transação no banco e retorna tanto a mensagem personalizada, quanto a padrão do erro
                 await _unitOfWork.RollBackTransactionAsync();
                 throw new DatabaseException("Problemas para atualiazar usuário: " + ex.Message, ex);
             }
@@ -56,7 +56,7 @@ namespace academia.Application.Services
 
         public async Task<long> CadastrarUsuarioAsync(UsuarioCadastroDto usuarioDto, CancellationToken cancellationToken)
         {
-            await _usuarioCadastroValidator.ValidateAndThrowAsync(usuarioDto);
+            await _usuarioCadastroValidator.ValidateAndThrowAsync(usuarioDto);//validações de entrada
 
             try
             {
@@ -72,14 +72,14 @@ namespace academia.Application.Services
 
                 return usuarioId;
             }
-            catch (Exception ex) 
-            {
+            catch (Exception ex)
+            {//Em caso de erro ele retorna tanto a mensagem personalizada, quanto a padrão do erro
                 throw new BusinessException("Erro ao cadastrar usuário. " + ex.Message, ex);
             }
         }
 
         public async Task<UsuarioRetornoDto> ObterUsuarioAsync(long id, CancellationToken cancellationToken)
-        {
+        {//obtem a entidade no banco usando um select preparado no nosso repository service
             try
             {
                 return await _unitOfWork.UsuarioRepository.ObterAsync<UsuarioRetornoDto>(
@@ -88,7 +88,7 @@ namespace academia.Application.Services
                 );
             }
             catch (Exception ex)
-            {
+            {//Em caso de erro ele retorna tanto a mensagem personalizada, quanto a padrão do erro
                 throw new NotFoundException("Usuário não encontrado no banco: " + ex.Message, ex);
             }
         }
@@ -103,7 +103,7 @@ namespace academia.Application.Services
                 return retorno.ToList();
             }
             catch (Exception ex)
-            {
+            {//Em caso de erro ele retorna tanto a mensagem personalizada, quanto a padrão do erro
                 throw new NotFoundException("Erro ao obter usuários do banco: " + ex.Message, ex);
             }
         }

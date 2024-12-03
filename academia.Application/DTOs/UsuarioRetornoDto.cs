@@ -8,6 +8,7 @@ namespace academia.Application.DTOs
 {
     public class UsuarioRetornoDto
     {
+        //model response de usuario retorno
         public long Id { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }

@@ -14,6 +14,7 @@ namespace academia.Infrastructure.Persistence.Mappings
     {
         protected override void ConfigureMapping(EntityTypeBuilder<Usuario> builder)
         {
+            //mapeamento da entidade usuario
 
             builder.Property(c => c.Nome)
                 .IsRequired()

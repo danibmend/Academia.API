@@ -10,6 +10,7 @@ namespace academia.Domain.Interfaces.IRepository
 {
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
+        //Interface (Contrato de uso da injeção de dependencia) do nosso repository base (genérico), todos repositories herdam dele 
         Task<long> CriarAsync(TEntity obj, CancellationToken cancellationToken = default);
         Task CriarAsync(TEntity[] obj, CancellationToken cancellationToken = default);
         Task AtualizarAsync(TEntity entity, CancellationToken cancellationToken = default);

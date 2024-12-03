@@ -22,8 +22,11 @@ namespace academia.Infrastructure.Repository
         }
 
         public ApplicationDbContext Context => _context;
+        //inicia a transação no banco de dados
         public async Task BeginTransactionAsync() => await _context.Database.BeginTransactionAsync();
+        //commita (confirma) a transação no banco de dados
         public async Task CommitTransactionAsync() => await _context.Database.CommitTransactionAsync();
+        //desfaz a transação no banco de dados
         public async Task RollBackTransactionAsync() => await _context.Database.RollbackTransactionAsync();
 
         public void Dispose()

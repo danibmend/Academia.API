@@ -8,6 +8,7 @@ namespace academia.Domain.Exceptions
 {
     public class BusinessException : Exception
     {
+        //classe de exception personalizada
         public BusinessException()
         {
         }

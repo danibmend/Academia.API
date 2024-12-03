@@ -8,6 +8,7 @@ namespace academia.Application.DTOs
 {
     public class UsuarioCadastroDto
     {
+        //Model Request de cadastrar usuario
         public string? Nome { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }

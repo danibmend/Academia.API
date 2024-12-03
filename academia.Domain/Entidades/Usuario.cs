@@ -9,6 +9,7 @@ namespace academia.Domain.Entidades
 {
     public class Usuario : BaseEntity
     {
+        //entidade de usuario
         public string? Nome { get; set; }
         public string? Email { get; set; }
         public string? Senha { get; set; }

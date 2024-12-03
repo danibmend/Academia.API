@@ -8,6 +8,7 @@ namespace academia.Domain.Exceptions
 {
     public class DatabaseException : Exception
     {
+        //classe de exception personalizada
         public DatabaseException()
         {
         }

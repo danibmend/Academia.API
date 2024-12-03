@@ -13,6 +13,8 @@ namespace academia.Infrastructure.Persistence.Mappings.Base
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
+            //mapeamento da entidade base, tornando-se também a baseMap
+
             builder.Property(c => c.Id)
                 .HasColumnName("ID")
                 .HasColumnOrder(1)

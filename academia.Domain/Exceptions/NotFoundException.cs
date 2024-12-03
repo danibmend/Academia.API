@@ -8,6 +8,7 @@ namespace academia.Domain.Exceptions
 {
     public class NotFoundException : Exception
     {
+        //classe de exception personalizada
         public NotFoundException() 
         { 
         }

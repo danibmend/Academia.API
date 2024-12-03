@@ -9,7 +9,8 @@ using academia.Application.Services.Base;
 namespace academia.Application.Validations.Utils
 {
     public class UtilsValidator : ServiceBase, IUtilsValidator
-    {
+    {//Base de métodos centralizados em uma só classe, que são usados nas validações de entrada dos nossos endpoints
+
         public UtilsValidator(IServiceProvider serviceProvider) : base(serviceProvider) 
         { 
         }

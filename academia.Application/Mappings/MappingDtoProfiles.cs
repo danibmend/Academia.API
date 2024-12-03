@@ -9,6 +9,6 @@ namespace academia.Application.Mappings
 {
     public class MappingDtoProfiles : Profile
     {
-        public MappingDtoProfiles() { } 
+        public MappingDtoProfiles() { } //mapper assembly
     }
 }

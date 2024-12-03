@@ -9,6 +9,8 @@ namespace academia.Domain.Interfaces
 {
     public interface IUnitOfWork
     {
+        //interface do unitofwork
+
         IUsuarioRepository UsuarioRepository { get; }
 
         Task BeginTransactionAsync();

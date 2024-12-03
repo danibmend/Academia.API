@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace academia.Infrastructure
 {
     public class ErrorHandlerMiddleware
-    {
+    { //Classe que vai lidar com qualquer excessao gerada dentro da nossa aplicação, tanto as esperadas como as inesperadas.
         private readonly RequestDelegate next;
 
         public ErrorHandlerMiddleware(RequestDelegate next)
@@ -24,6 +24,7 @@ namespace academia.Infrastructure
 
         public async Task Invoke(HttpContext context)
         {
+            //dentro desse trycatch ele vai analisar o tipo de excessão gerada de acordo com as classes criadas ou a genérica (exception) e vai lidar com elas.
             try
             {
                 await next(context);
@@ -72,6 +73,7 @@ namespace academia.Infrastructure
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception, HttpStatusCode statusCode)
         {
+            //Aqui é montado o nosso response padrão para qualquer endpoint em caso de erro, para ajudar o frontend (mensagem) e o desenvolvedor em caso de debug
             var code = statusCode;
 
             var result = JsonConvert.SerializeObject(new

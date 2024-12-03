@@ -13,9 +13,10 @@ namespace academia.WebApi.Controllers
         private readonly IUsuarioService _usuarioService;
 
         public UsuarioController(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
+        {//Injeção de dependencia da classe de serviços do usuario
             _usuarioService = serviceProvider.GetRequiredService<IUsuarioService>();
         }
+        //Post
         [HttpPost("usuario")]
         public async Task<IActionResult> CadastrarUsuario([FromBody] UsuarioCadastroDto request, CancellationToken cancellationToken)
         {
@@ -23,6 +24,7 @@ namespace academia.WebApi.Controllers
             return Response(idUsuarioCriado);
         }
 
+        //Put
         [HttpPut("usuario")]
         public async Task<IActionResult> AtualizarDadosUsuario([FromBody] UsuarioAtualizarDto request, CancellationToken cancellationToken)
         {
@@ -30,6 +32,7 @@ namespace academia.WebApi.Controllers
             return Response();
         }
 
+        //Get Identity UNICO
         [HttpGet("usuario/{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(UsuarioRetornoDto), StatusCodes.Status200OK)]
@@ -39,15 +42,17 @@ namespace academia.WebApi.Controllers
             return Response(result);
         }
 
+        //Get Lista de entidades
         [HttpGet("usuarios")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(List<UsuarioRetornoDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Response se der erro
+        [ProducesResponseType(typeof(List<UsuarioRetornoDto>), StatusCodes.Status200OK)] //Response se der tudo ok
         public async Task<IActionResult> ObterUsuarios(CancellationToken cancellationToken)
         {
             var result = await _usuarioService.ObterUsuariosAsync(cancellationToken);
             return Response(result);
         }
 
+        //Validação de Login (Post)
         [HttpPost("usuario/validar")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]

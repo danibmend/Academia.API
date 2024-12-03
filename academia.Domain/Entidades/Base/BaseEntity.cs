@@ -10,6 +10,7 @@ namespace academia.Domain.Entidades.Base
 {
     public class BaseEntity
     {
+        //base entidade (Todas entidades herdaram as seguintes propriedades)
         public long Id { get; set; }
         public DateTime DataCriacao { get; set; } = DateTime.Now;
         public DateTime DataAtualizacao { get; set; } = DateTime.Now;

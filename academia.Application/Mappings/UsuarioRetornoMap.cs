@@ -13,6 +13,7 @@ namespace academia.Application.Mappings
     {
         public UsuarioRetornoMap() 
         {
+            //mapeando a entidade usuario usando o projection, para auxiliar no cache do banco de dados, retornando somente o necessario (RetornoDto)
             CreateProjection<Usuario, UsuarioRetornoDto>()
                 .ForMember(c => c.Password, e => e.MapFrom(e => e.Senha));
         }

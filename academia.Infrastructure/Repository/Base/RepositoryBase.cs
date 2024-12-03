@@ -18,6 +18,8 @@ namespace academia.Infrastructure.Repository.Base
 {
         public abstract class RepositoryBase<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
         {
+        //baseRepository com todos os métodos herdados da interface.
+
             private ApplicationDbContext _context { get; set; }
             private IMapper _mapper;
             private MapperConfiguration _mapperConfiguration;
@@ -29,7 +31,7 @@ namespace academia.Infrastructure.Repository.Base
             }
 
             #region Métodos de Criação
-
+            //Create Entity na database (genérico) e em caso de erro ele da um clear nas tracks
             public async Task<long> CriarAsync(TEntity obj, CancellationToken cancellationToken = default)
             {
                 try
@@ -44,8 +46,8 @@ namespace academia.Infrastructure.Repository.Base
                     throw ex;
                 }
             }
-
-            public async Task CriarAsync(TEntity[] obj, CancellationToken cancellationToken = default)
+        //Create List Entity na database (genérico) e em caso de erro ele da um clear nas tracks
+        public async Task CriarAsync(TEntity[] obj, CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -62,8 +64,8 @@ namespace academia.Infrastructure.Repository.Base
                     throw ex;
                 }
             }
-
-            public async Task AtualizarAsync(TEntity entity, CancellationToken cancellationToken = default)
+        //Update Entity na database (genérico) e em caso de erro ele da um clear nas tracks
+        public async Task AtualizarAsync(TEntity entity, CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -78,7 +80,8 @@ namespace academia.Infrastructure.Repository.Base
                 }
             }
 
-            public async Task AtualizarAsync(TEntity[] entity, CancellationToken cancellationToken = default)
+        //Update List Entity na database (genérico) e em caso de erro ele da um clear nas tracks
+        public async Task AtualizarAsync(TEntity[] entity, CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -93,7 +96,8 @@ namespace academia.Infrastructure.Repository.Base
                 }
             }
 
-            public async Task RemoverAsync(TEntity entity, CancellationToken cancellationToken = default)
+        //Remove Entity na database (genérico) e em caso de erro ele da um clear nas tracks
+        public async Task RemoverAsync(TEntity entity, CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -108,7 +112,8 @@ namespace academia.Infrastructure.Repository.Base
                 }
             }
 
-            public async Task RemoverAsync(TEntity[] obj, CancellationToken cancellationToken = default)
+        //Remove List Entity na database (genérico) e em caso de erro ele da um clear nas tracks
+        public async Task RemoverAsync(TEntity[] obj, CancellationToken cancellationToken = default)
             {
                 try
                 {
@@ -126,11 +131,12 @@ namespace academia.Infrastructure.Repository.Base
                 }
             }
 
-            #endregion
+        #endregion
 
-            #region Métodos de Listagem
+        #region Métodos de Listagem
 
-            public async Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
+        //GET LIST Entity na database (genérico) com mapper
+        public async Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
                 CancellationToken cancellationToken = default)
             {
                 var set = _context.Set<TEntity>().AsQueryable();
@@ -140,8 +146,8 @@ namespace academia.Infrastructure.Repository.Base
                     .ToListAsync(cancellationToken);
                 return result;
             }
-
-            public async Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
+        //GET LIST Entity na database (genérico) COM MAPPER E PAGINATION
+        public async Task<IEnumerable<TDto>> ObterListaAsync<TDto>(
                 Expression<Func<TEntity, bool>> expression,
                 Expression<Func<TEntity, TDto>> select,
                 string? includes = null,
@@ -194,8 +200,8 @@ namespace academia.Infrastructure.Repository.Base
             {
                 return await _context.Set<TEntity>().ToListAsync(cancellationToken);
             }
-
-            public async Task<TEntity> ObterPorIdAsync(long id, string? includes = null, CancellationToken cancellationToken = default)
+        //GET Identificador único (Id) Entity na database (genérico)
+        public async Task<TEntity> ObterPorIdAsync(long id, string? includes = null, CancellationToken cancellationToken = default)
             {
                 var set = _context.Set<TEntity>().AsQueryable();
                 set = ApplyIncludes(set, includes);
@@ -210,7 +216,8 @@ namespace academia.Infrastructure.Repository.Base
                 return result;
 
             }
-            public async Task<TDto> ObterPorIdAsync<TDto>(long id, string? includes = null, CancellationToken cancellationToken = default)
+        //GET Identificador único (Id) Entity na database (genérico) com mapper 
+        public async Task<TDto> ObterPorIdAsync<TDto>(long id, string? includes = null, CancellationToken cancellationToken = default)
             {
                 var set = _context.Set<TEntity>().AsQueryable();
                 set = ApplyIncludes(set, includes);
@@ -225,8 +232,8 @@ namespace academia.Infrastructure.Repository.Base
 
                 return result;
             }
-
-            public async Task<TDto> ObterAsync<TDto>(
+        //GET com expression (liberdade de consulta) Entity na database (genérico)
+        public async Task<TDto> ObterAsync<TDto>(
                 Expression<Func<TEntity, bool>> expression,
                 string? includes = null,
                 string? orderBy = null,
@@ -244,8 +251,8 @@ namespace academia.Infrastructure.Repository.Base
 
                 return result;
             }
-
-            public async Task<TDto> ObterAsync<TDto>(
+        //GET com expression (liberdade de consulta) Entity na database (genérico)
+        public async Task<TDto> ObterAsync<TDto>(
                 Expression<Func<TEntity, bool>> expression,
                 Expression<Func<TEntity, TDto>> select,
                 string? includes = null,
